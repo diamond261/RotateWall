@@ -1,6 +1,6 @@
 Package: com.261.rotatewall
 Name: RotateWall
-Version: 0.1.2
+Version: 0.1.3
 Architecture: iphoneos-arm
 Description: RotateWall is a jailbreak tweak for iPadOS 16.1.1 that switches wallpapers based on device orientation.
 Maintainer: denial,diamond261

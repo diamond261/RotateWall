@@ -129,7 +129,6 @@ static NSString * const kHomeLandscapeFilename = @"home-landscape.jpg";
 			if (posix_spawn(&pid, sbreloadPaths[i], NULL, NULL, argv, environ) == 0) {
 				return;
 			}
-			return;
 		}
 	}
 
@@ -142,7 +141,6 @@ static NSString * const kHomeLandscapeFilename = @"home-landscape.jpg";
 			if (posix_spawn(&pid, ldrestartPaths[i], NULL, NULL, argv, environ) == 0) {
 				return;
 			}
-			return;
 		}
 	}
 
@@ -155,7 +153,6 @@ static NSString * const kHomeLandscapeFilename = @"home-landscape.jpg";
 			if (posix_spawn(&pid, killallPaths[i], NULL, NULL, argv, environ) == 0) {
 				return;
 			}
-			return;
 		}
 	}
 
