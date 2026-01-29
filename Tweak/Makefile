@@ -5,6 +5,7 @@ DoABarrelWall_FRAMEWORKS = UIKit
 DoABarrelWall_EXTRA_FRAMEWORKS = Cephei 
 DoABarrelWall_LIBRARIES = gcuniversal
 ADDITIONAL_CFLAGS += -DTHEOS_LEAN_AND_MEAN
+ADDITIONAL_CFLAGS += -std=gnu++11 -Wno-c++11-extensions
 
 include $(THEOS)/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/tweak.mk
