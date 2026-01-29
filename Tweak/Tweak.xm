@@ -148,8 +148,8 @@
 	static UIImage *wallpaperImageForLocation(WallpaperLocation location) {
 		BOOL landscape = currentLandscapeOrientation();
 		NSString *key = (location & kLockScreen)
-			? (landscape ? kLockPortraitKey : kLockLandscapeKey)
-			: (landscape ? kHomePortraitKey : kHomeLandscapeKey);
+			? (landscape ? kLockLandscapeKey : kLockPortraitKey)
+			: (landscape ? kHomeLandscapeKey : kHomePortraitKey);
 		return wallpaperImageForKey(key);
 	}
 

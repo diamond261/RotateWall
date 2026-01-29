@@ -120,37 +120,37 @@ static NSString * const kHomeLandscapeFilename = @"home-landscape.jpg";
 		return;
 	}
 
-	const char *sbreloadPaths[] = { "/var/jb/usr/bin/sbreload", "/usr/bin/sbreload" };
-	for (NSUInteger i = 0; i < 2; i++) {
-		if (access(sbreloadPaths[i], X_OK) == 0) {
+	NSArray<NSString *> *sbreloadPaths = @[ROOT_PATH_NS(@"/usr/bin/sbreload"), @"/usr/bin/sbreload"];
+	for (NSString *path in sbreloadPaths) {
+		if ([[NSFileManager defaultManager] isExecutableFileAtPath:path]) {
 			pid_t pid;
-			char *argv[] = { (char *)sbreloadPaths[i], NULL };
+			char *argv[] = { (char *)[path UTF8String], NULL };
 			extern char **environ;
-			if (posix_spawn(&pid, sbreloadPaths[i], NULL, NULL, argv, environ) == 0) {
+			if (posix_spawn(&pid, [path UTF8String], NULL, NULL, argv, environ) == 0) {
 				return;
 			}
 		}
 	}
 
-	const char *ldrestartPaths[] = { "/var/jb/usr/bin/ldrestart", "/usr/bin/ldrestart" };
-	for (NSUInteger i = 0; i < 2; i++) {
-		if (access(ldrestartPaths[i], X_OK) == 0) {
+	NSArray<NSString *> *ldrestartPaths = @[ROOT_PATH_NS(@"/usr/bin/ldrestart"), @"/usr/bin/ldrestart"];
+	for (NSString *path in ldrestartPaths) {
+		if ([[NSFileManager defaultManager] isExecutableFileAtPath:path]) {
 			pid_t pid;
-			char *argv[] = { (char *)ldrestartPaths[i], NULL };
+			char *argv[] = { (char *)[path UTF8String], NULL };
 			extern char **environ;
-			if (posix_spawn(&pid, ldrestartPaths[i], NULL, NULL, argv, environ) == 0) {
+			if (posix_spawn(&pid, [path UTF8String], NULL, NULL, argv, environ) == 0) {
 				return;
 			}
 		}
 	}
 
-	const char *killallPaths[] = { "/var/jb/usr/bin/killall", "/usr/bin/killall" };
-	for (NSUInteger i = 0; i < 2; i++) {
-		if (access(killallPaths[i], X_OK) == 0) {
+	NSArray<NSString *> *killallPaths = @[ROOT_PATH_NS(@"/usr/bin/killall"), @"/usr/bin/killall"];
+	for (NSString *path in killallPaths) {
+		if ([[NSFileManager defaultManager] isExecutableFileAtPath:path]) {
 			pid_t pid;
-			char *argv[] = { (char *)killallPaths[i], "-9", "SpringBoard", NULL };
+			char *argv[] = { (char *)[path UTF8String], "-9", "SpringBoard", NULL };
 			extern char **environ;
-			if (posix_spawn(&pid, killallPaths[i], NULL, NULL, argv, environ) == 0) {
+			if (posix_spawn(&pid, [path UTF8String], NULL, NULL, argv, environ) == 0) {
 				return;
 			}
 		}
