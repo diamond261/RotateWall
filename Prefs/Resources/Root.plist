@@ -110,7 +110,11 @@
 			<key>label</key>
 			<string>Select Portrait Photo</string>
 			<key>action</key>
-			<string>pickLockPortrait</string>
+			<string>pickPhoto:</string>
+			<key>rwPrefsKey</key>
+			<string>lockPortraitPath</string>
+			<key>rwFilename</key>
+			<string>lock-portrait.jpg</string>
 		</dict>
 
 		<dict>
@@ -126,7 +130,11 @@
 			<key>label</key>
 			<string>Select Landscape Photo</string>
 			<key>action</key>
-			<string>pickLockLandscape</string>
+			<string>pickPhoto:</string>
+			<key>rwPrefsKey</key>
+			<string>lockLandscapePath</string>
+			<key>rwFilename</key>
+			<string>lock-landscape.jpg</string>
 		</dict>
 
 		<dict>
@@ -142,7 +150,11 @@
 			<key>label</key>
 			<string>Select Portrait Photo</string>
 			<key>action</key>
-			<string>pickHomePortrait</string>
+			<string>pickPhoto:</string>
+			<key>rwPrefsKey</key>
+			<string>homePortraitPath</string>
+			<key>rwFilename</key>
+			<string>home-portrait.jpg</string>
 		</dict>
 
 		<dict>
@@ -158,7 +170,11 @@
 			<key>label</key>
 			<string>Select Landscape Photo</string>
 			<key>action</key>
-			<string>pickHomeLandscape</string>
+			<string>pickPhoto:</string>
+			<key>rwPrefsKey</key>
+			<string>homeLandscapePath</string>
+			<key>rwFilename</key>
+			<string>home-landscape.jpg</string>
 		</dict>
 	</array>
 	<key>title</key>

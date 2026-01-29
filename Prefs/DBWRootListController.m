@@ -3,6 +3,7 @@
 #import <rootless.h>
 #import <Cephei/HBPreferences.h>
 #import <Cephei/HBRespringController.h>
+#import <Preferences/PSSpecifier.h>
 #import <spawn.h>
 #import <unistd.h>
 
@@ -46,20 +47,10 @@ static NSString * const kHomeLandscapeFilename = @"home-landscape.jpg";
 	return self;
 }
 
-- (void)pickLockPortrait {
-	[self presentPickerForKey:kLockPortraitKey filename:kLockPortraitFilename];
-}
-
-- (void)pickLockLandscape {
-	[self presentPickerForKey:kLockLandscapeKey filename:kLockLandscapeFilename];
-}
-
-- (void)pickHomePortrait {
-	[self presentPickerForKey:kHomePortraitKey filename:kHomePortraitFilename];
-}
-
-- (void)pickHomeLandscape {
-	[self presentPickerForKey:kHomeLandscapeKey filename:kHomeLandscapeFilename];
+- (void)pickPhoto:(PSSpecifier *)specifier {
+	NSString *prefsKey = [specifier propertyForKey:@"rwPrefsKey"];
+	NSString *filename = [specifier propertyForKey:@"rwFilename"];
+	[self presentPickerForKey:prefsKey filename:filename];
 }
 
 - (void)presentPickerForKey:(NSString *)prefsKey filename:(NSString *)filename {
@@ -134,7 +125,23 @@ static NSString * const kHomeLandscapeFilename = @"home-landscape.jpg";
 		if (access(sbreloadPaths[i], X_OK) == 0) {
 			pid_t pid;
 			char *argv[] = { (char *)sbreloadPaths[i], NULL };
-			posix_spawn(&pid, sbreloadPaths[i], NULL, NULL, argv, NULL);
+			extern char **environ;
+			if (posix_spawn(&pid, sbreloadPaths[i], NULL, NULL, argv, environ) == 0) {
+				return;
+			}
+			return;
+		}
+	}
+
+	const char *ldrestartPaths[] = { "/var/jb/usr/bin/ldrestart", "/usr/bin/ldrestart" };
+	for (NSUInteger i = 0; i < 2; i++) {
+		if (access(ldrestartPaths[i], X_OK) == 0) {
+			pid_t pid;
+			char *argv[] = { (char *)ldrestartPaths[i], NULL };
+			extern char **environ;
+			if (posix_spawn(&pid, ldrestartPaths[i], NULL, NULL, argv, environ) == 0) {
+				return;
+			}
 			return;
 		}
 	}
@@ -144,7 +151,10 @@ static NSString * const kHomeLandscapeFilename = @"home-landscape.jpg";
 		if (access(killallPaths[i], X_OK) == 0) {
 			pid_t pid;
 			char *argv[] = { (char *)killallPaths[i], "-9", "SpringBoard", NULL };
-			posix_spawn(&pid, killallPaths[i], NULL, NULL, argv, NULL);
+			extern char **environ;
+			if (posix_spawn(&pid, killallPaths[i], NULL, NULL, argv, environ) == 0) {
+				return;
+			}
 			return;
 		}
 	}
