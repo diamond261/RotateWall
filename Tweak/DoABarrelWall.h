@@ -14,23 +14,12 @@
 
 HBPreferences* preferences;
 
-BOOL lockscreenEnabled;                 //if lockscreen wallpaper is enabled
-BOOL homescreenEnabled;                 //if homescreen wallpaper is enabled
-BOOL syncBothScreens;                   //if sync both lockscreen and homescreen is enabled
-BOOL compatibilityModeEnabled;          //if tweak compatibility mode is enabled
+BOOL lockscreenEnabled;
+BOOL homescreenEnabled;
+BOOL compatibilityModeEnabled;
+BOOL fadeEnabled;
 
-BOOL disableChangeOnAppExit;            //if user wants the wallpaper to only change by lockscreen
-UIColor *lockAvgColor;                  //average color of the lockscreen wallpaper
-
-NSUInteger numberOfImagesToCache;       //thanks gc for clarifying that NSUInteger is a primitive type, not an object lol
-
-NSString *previousLSVariable;           //string to save last used lockscreen image variable
-NSString *previousHSVariable;           //string to save last used homescreen image variable
-
-NSString *variableLSName;               //string to set current chosen lockscreen image variable
-NSString *variableHSName;               //string to set current chosen homescreen image variable
-
-NSArray *imageVariableList;             //array to hold all the available image variables to choose from
-NSCache *cacheImageList;                //dictionary array to hold cache images
+UIColor *lockAvgColor;
+NSCache *cacheImageList;
 
 NSString * const kPrefsIdentifier = @"com.denial.doabarrelwallprefs";

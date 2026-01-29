@@ -4,30 +4,11 @@
 <dict>
 	<key>items</key>
 	<array>
-
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Contributors are more important</string>
-		</dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>label</key>
-			<string>Full Contributor List</string>
-			<key>action</key>
-			<string>contributorsList</string>
-		</dict>
-
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Options</string>
-			<key>footerText</key>
-			<string>Sync both wallpapers makes the homescreen wallpaper the same as the lockscreen. Takes precedence over disabling HS change.</string>
 		</dict>
 
 		<dict>
@@ -60,26 +41,22 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>label</key>
-			<string>Sync Both Wallpapers</string>
+			<string>Fade Transition</string>
 			<key>defaults</key>
 			<string>com.denial.doabarrelwallprefs</string>
 			<key>key</key>
-			<string>syncBothScreens</string>
+			<string>fadeEnabled</string>
 			<key>PostNotification</key>
 			<string>com.denial.doabarrelwallprefs/ReloadPrefs</string>
 		</dict>
 
 		<dict>
 			<key>cell</key>
-			<string>PSSwitchCell</string>
+			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Disable HS Change On App Exit</string>
-			<key>defaults</key>
-			<string>com.denial.doabarrelwallprefs</string>
-			<key>key</key>
-			<string>disableChangeOnAppExit</string>
-			<key>PostNotification</key>
-			<string>com.denial.doabarrelwallprefs/ReloadPrefs</string>
+			<string>Compatibility</string>
+			<key>footerText</key>
+			<string>Enable if other tweaks rely on lockscreen wallpaper notifications or average color.</string>
 		</dict>
 
 		<dict>
@@ -101,93 +78,89 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>The fun part</string>
-			<key>footerText</key>
-			<string>The more images you set, the slower the next page will load. Given how iOS loads pages like these, there's only so much memory your device can allocate for. If the page repeatedly crashes, just reset everything below.</string>
-		</dict>
-
-		<dict>
- 			<key>cell</key>
- 			<string>PSLinkCell</string>
- 			<key>label</key>
- 			<string>Images</string>
- 			<key>detail</key>
- 			<string>DBWWallpaperImageList</string>
- 			<key>DBWWalls</key>
- 			<string>WallpaperImageList</string>
- 		</dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Number of images to cache</string>
-			<key>footerText</key>
-			<string>The higher the number, the less likely to experience wallpaper change delays, but more RAM will be used, and vice versa.</string>
+			<string>Lock Screen - Portrait</string>
 		</dict>
 
 		<dict>
 			<key>cellClass</key>
-			<string>HBStepperTableCell</string>
+			<string>GcImagePickerCell</string>
 			<key>label</key>
-			<string>Images To Cache: %i</string>
-			<key>key</key>
-			<string>numberOfImagesToCache</string>
-			<key>default</key>
-			<real>5</real>
-			<key>min</key>
-			<real>2</real>
-			<key>max</key>
-			<real>20</real>
-			<key>singularLabel</key>
-			<string># Of Images To Cache: 5</string>
+			<string>Portrait Wallpaper</string>
 			<key>defaults</key>
 			<string>com.denial.doabarrelwallprefs</string>
-		</dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Respring to save changes</string>
-		</dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>label</key>
-			<string>Respring</string>
-			<key>action</key>
-			<string>respringUtil</string>
-		</dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Reset Everything</string>
-		</dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>label</key>
-			<string>Reset Preferences</string>
-			<key>action</key>
-			<string>resetPreferences</string>
-		</dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>footerText</key>
-			<string>Extremely tired 😴</string>
-			<key>isStaticText</key>
+			<key>key</key>
+			<string>lockPortraitImage</string>
+			<key>PostNotification</key>
+			<string>com.denial.doabarrelwallprefs/ReloadPrefs</string>
+			<key>enabled</key>
 			<true/>
-			<key>footerAlignment</key>
-			<real>1</real>
 		</dict>
 
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Lock Screen - Landscape</string>
+		</dict>
+
+		<dict>
+			<key>cellClass</key>
+			<string>GcImagePickerCell</string>
+			<key>label</key>
+			<string>Landscape Wallpaper</string>
+			<key>defaults</key>
+			<string>com.denial.doabarrelwallprefs</string>
+			<key>key</key>
+			<string>lockLandscapeImage</string>
+			<key>PostNotification</key>
+			<string>com.denial.doabarrelwallprefs/ReloadPrefs</string>
+			<key>enabled</key>
+			<true/>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Home Screen - Portrait</string>
+		</dict>
+
+		<dict>
+			<key>cellClass</key>
+			<string>GcImagePickerCell</string>
+			<key>label</key>
+			<string>Portrait Wallpaper</string>
+			<key>defaults</key>
+			<string>com.denial.doabarrelwallprefs</string>
+			<key>key</key>
+			<string>homePortraitImage</string>
+			<key>PostNotification</key>
+			<string>com.denial.doabarrelwallprefs/ReloadPrefs</string>
+			<key>enabled</key>
+			<true/>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Home Screen - Landscape</string>
+		</dict>
+
+		<dict>
+			<key>cellClass</key>
+			<string>GcImagePickerCell</string>
+			<key>label</key>
+			<string>Landscape Wallpaper</string>
+			<key>defaults</key>
+			<string>com.denial.doabarrelwallprefs</string>
+			<key>key</key>
+			<string>homeLandscapeImage</string>
+			<key>PostNotification</key>
+			<string>com.denial.doabarrelwallprefs/ReloadPrefs</string>
+			<key>enabled</key>
+			<true/>
+		</dict>
 	</array>
 	<key>title</key>
 	<string>DoABarrelWall</string>
