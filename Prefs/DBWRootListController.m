@@ -1,6 +1,7 @@
 #import "DBWRootListController.h"
 #import <PhotosUI/PhotosUI.h>
 #import <rootless.h>
+#import <Cephei/HBPreferences.h>
 
 static NSString * const kPrefsIdentifier = @"com.denial.doabarrelwallprefs";
 static NSString * const kRotateWallDir = @"/var/mobile/Library/RotateWall";

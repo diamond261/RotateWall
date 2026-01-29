@@ -1,8 +1,8 @@
-Package: com.denial.doabarrelwall
-Name: DoABarrelWall
+Package: com.261.RotateWall
+Name: RotateWall
 Version: 0.1.11
 Architecture: iphoneos-arm
-Description: Cycle through lockscreen and homescreen wallpapers when unlocking device.
+Description: RotateWall is a jailbreak tweak for iPadOS 16.1.1 that switches wallpapers based on device orientation.
 Maintainer: denial
 Author: denial,diamond261
 Section: Tweaks
