@@ -67,13 +67,22 @@
 
 	static BOOL currentLandscapeOrientation(void) {
 		BOOL isLandscape = lastKnownLandscape;
-		UIInterfaceOrientation statusOrientation = UIInterfaceOrientationUnknown;
-		if ([[UIApplication sharedApplication] respondsToSelector:@selector(statusBarOrientation)]) {
-			statusOrientation = [UIApplication sharedApplication].statusBarOrientation;
+		UIInterfaceOrientation interfaceOrientation = UIInterfaceOrientationUnknown;
+		if (@available(iOS 13.0, *)) {
+			for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+				if (scene.activationState != UISceneActivationStateForegroundActive) {
+					continue;
+				}
+
+				if ([scene isKindOfClass:[UIWindowScene class]]) {
+					interfaceOrientation = ((UIWindowScene *)scene).interfaceOrientation;
+					break;
+				}
+			}
 		}
 
-		if (statusOrientation != UIInterfaceOrientationUnknown) {
-			isLandscape = UIInterfaceOrientationIsLandscape(statusOrientation);
+		if (interfaceOrientation != UIInterfaceOrientationUnknown) {
+			isLandscape = UIInterfaceOrientationIsLandscape(interfaceOrientation);
 		} else {
 			UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
 			if (UIDeviceOrientationIsLandscape(deviceOrientation)) {
