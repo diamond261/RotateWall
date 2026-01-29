@@ -129,12 +129,19 @@
 
 		UIImage *img = [cacheImageList objectForKey:path];
 		if (!img) {
-			img = [UIImage imageWithContentsOfFile:path];
+			NSData *data = [NSData dataWithContentsOfFile:path options:0 error:nil];
+			if (!data) {
+				return nil;
+			}
+
+			img = [UIImage imageWithData:data];
 			if (!img) {
 				return nil;
 			}
+
 			[cacheImageList setObject:img forKey:path];
 		}
+
 		return img;
 	}
 

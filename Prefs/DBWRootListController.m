@@ -3,6 +3,8 @@
 #import <rootless.h>
 #import <Cephei/HBPreferences.h>
 #import <Cephei/HBRespringController.h>
+#import <spawn.h>
+#import <unistd.h>
 
 static NSString * const kPrefsIdentifier = @"com.denial.doabarrelwallprefs";
 static NSString * const kRotateWallDir = @"/var/mobile/Library/RotateWall";
@@ -125,6 +127,26 @@ static NSString * const kHomeLandscapeFilename = @"home-landscape.jpg";
 	if ([HBRespringController respondsToSelector:@selector(respring)]) {
 		[HBRespringController respring];
 		return;
+	}
+
+	const char *sbreloadPaths[] = { "/var/jb/usr/bin/sbreload", "/usr/bin/sbreload" };
+	for (NSUInteger i = 0; i < 2; i++) {
+		if (access(sbreloadPaths[i], X_OK) == 0) {
+			pid_t pid;
+			char *argv[] = { (char *)sbreloadPaths[i], NULL };
+			posix_spawn(&pid, sbreloadPaths[i], NULL, NULL, argv, NULL);
+			return;
+		}
+	}
+
+	const char *killallPaths[] = { "/var/jb/usr/bin/killall", "/usr/bin/killall" };
+	for (NSUInteger i = 0; i < 2; i++) {
+		if (access(killallPaths[i], X_OK) == 0) {
+			pid_t pid;
+			char *argv[] = { (char *)killallPaths[i], "-9", "SpringBoard", NULL };
+			posix_spawn(&pid, killallPaths[i], NULL, NULL, argv, NULL);
+			return;
+		}
 	}
 
 	[HBRespringController respringAndReturnTo:[NSURL URLWithString:@"prefs:root=RotateWall"]];
