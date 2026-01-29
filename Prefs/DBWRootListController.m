@@ -127,7 +127,7 @@ static NSString * const kHomeLandscapeFilename = @"home-landscape.jpg";
 		return;
 	}
 
-	[HBRespringController respringAndReturnTo:[NSURL URLWithString:@"prefs:root=DoABarrelWall"]];
+	[HBRespringController respringAndReturnTo:[NSURL URLWithString:@"prefs:root=RotateWall"]];
 }
 
 @end

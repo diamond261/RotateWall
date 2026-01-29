@@ -59,7 +59,7 @@ Deployment and debugging:
 
 ## Project Layout
 
-- `Tweak/` contains Logos hooks and tweak logic (`Tweak.xm`, `DoABarrelWall.h`).
+- `Tweak/` contains Logos hooks and tweak logic (`Tweak.xm`, `RotateWall.h`).
 - `Prefs/` contains Preferences bundle code and resources.
 - `Prefs/Resources/` holds `Root.plist` and other preferences UI resources.
 - `control` defines the package metadata.
@@ -107,7 +107,7 @@ Deployment and debugging:
 ### Types and Collections
 - Prefer immutable types unless mutation is required (`NSArray` vs `NSMutableArray`).
 - Use `NSUInteger` for counts and indexes.
-- When storing images, use `NSCache` as in `Tweak/DoABarrelWall.h`.
+- When storing images, use `NSCache` as in `Tweak/RotateWall.h`.
 
 ### Error Handling and Safety
 - Check for `nil` before use (e.g., image lookups).
@@ -133,11 +133,11 @@ Deployment and debugging:
 ## When Adding or Modifying Code
 - Match existing tone and style of comments (casual, explanatory).
 - Prefer small, localized changes; avoid refactors unless asked.
-- Keep global variables organized in `Tweak/DoABarrelWall.h`.
+- Keep global variables organized in `Tweak/RotateWall.h`.
 - Any new preference keys should be registered in the tweak ctor.
 
 ## Files to Know
 - `Tweak/Tweak.xm`: main hooks and wallpaper logic.
-- `Tweak/DoABarrelWall.h`: globals and common includes.
+- `Tweak/RotateWall.h`: globals and common includes.
 - `Prefs/DBWRootListController.m`: settings UI and actions.
 - `Makefile`, `Tweak/Makefile`, `Prefs/Makefile`: build configuration.

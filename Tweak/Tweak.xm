@@ -1,4 +1,4 @@
-#import "DoABarrelWall.h"
+#import "RotateWall.h"
 
 @interface SBLockScreenManager
 + (id)sharedInstance;
