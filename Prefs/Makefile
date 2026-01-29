@@ -1,10 +1,10 @@
-BUNDLE_NAME = DoABarrelWallPrefs
-DoABarrelWallPrefs_FILES = $(wildcard *.m)
-DoABarrelWallPrefs_PRIVATE_FRAMEWORKS = Preferences
-DoABarrelWallPrefs_EXTRA_FRAMEWORKS += Cephei CepheiPrefs
-DoABarrelWallPrefs_FRAMEWORKS = PhotosUI
-DoABarrelWallPrefs_CFLAGS = -fobjc-arc
-DoABarrelWallPrefs_INSTALL_PATH = /Library/PreferenceBundles
+BUNDLE_NAME = RotateWallPrefs
+RotateWallPrefs_FILES = $(wildcard *.m)
+RotateWallPrefs_PRIVATE_FRAMEWORKS = Preferences
+RotateWallPrefs_EXTRA_FRAMEWORKS += Cephei CepheiPrefs
+RotateWallPrefs_FRAMEWORKS = PhotosUI
+RotateWallPrefs_CFLAGS = -fobjc-arc
+RotateWallPrefs_INSTALL_PATH = /Library/PreferenceBundles
 ADDITIONAL_CFLAGS += -DTHEOS_LEAN_AND_MEAN
 
 ifneq ($(THEOS_PACKAGE_SCHEME),rootless)

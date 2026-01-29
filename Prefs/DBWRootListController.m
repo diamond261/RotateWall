@@ -2,6 +2,7 @@
 #import <PhotosUI/PhotosUI.h>
 #import <rootless.h>
 #import <Cephei/HBPreferences.h>
+#import <Cephei/HBRespringController.h>
 
 static NSString * const kPrefsIdentifier = @"com.denial.doabarrelwallprefs";
 static NSString * const kRotateWallDir = @"/var/mobile/Library/RotateWall";
@@ -121,6 +122,11 @@ static NSString * const kHomeLandscapeFilename = @"home-landscape.jpg";
 }
 
 - (void)respringUtil {
+	if ([HBRespringController respondsToSelector:@selector(respring)]) {
+		[HBRespringController respring];
+		return;
+	}
+
 	[HBRespringController respringAndReturnTo:[NSURL URLWithString:@"prefs:root=DoABarrelWall"]];
 }
 

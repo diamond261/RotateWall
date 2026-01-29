@@ -96,11 +96,28 @@
 		return isLandscape;
 	}
 
+	static NSString *validatedPath(NSString *path) {
+		if (![path isKindOfClass:[NSString class]] || [path length] == 0) {
+			return nil;
+		}
+
+		if (![path hasPrefix:@"/"]) {
+			return nil;
+		}
+
+		BOOL isDirectory = NO;
+		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory] || isDirectory) {
+			return nil;
+		}
+
+		return path;
+	}
+
 	static NSString *pathForKey(NSString *key) {
-		if ([key isEqualToString:kLockPortraitKey]) return lockPortraitPath;
-		if ([key isEqualToString:kLockLandscapeKey]) return lockLandscapePath;
-		if ([key isEqualToString:kHomePortraitKey]) return homePortraitPath;
-		if ([key isEqualToString:kHomeLandscapeKey]) return homeLandscapePath;
+		if ([key isEqualToString:kLockPortraitKey]) return validatedPath(lockPortraitPath);
+		if ([key isEqualToString:kLockLandscapeKey]) return validatedPath(lockLandscapePath);
+		if ([key isEqualToString:kHomePortraitKey]) return validatedPath(homePortraitPath);
+		if ([key isEqualToString:kHomeLandscapeKey]) return validatedPath(homeLandscapePath);
 		return nil;
 	}
 
