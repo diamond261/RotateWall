@@ -4,7 +4,6 @@ DoABarrelWallPrefs_PRIVATE_FRAMEWORKS = Preferences
 DoABarrelWallPrefs_EXTRA_FRAMEWORKS += Cephei CepheiPrefs
 DoABarrelWallPrefs_INSTALL_PATH = /Library/PreferenceBundles
 ADDITIONAL_CFLAGS += -DTHEOS_LEAN_AND_MEAN
-ADDITIONAL_CFLAGS += -std=gnu++11 -Wno-c++11-extensions
 
 ifneq ($(THEOS_PACKAGE_SCHEME),rootless)
 ADDITIONAL_CFLAGS += -D XINA_SUPPORT
