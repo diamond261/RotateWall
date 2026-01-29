@@ -6,8 +6,6 @@
 */
 
 #import <UIKit/UIKit.h>
-#import <GcUniversal/GcImagePickerUtils.h>
-#import <GcUniversal/GcImageUtils.h>
 #import <Cephei/HBPreferences.h>
 
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
@@ -21,5 +19,10 @@ BOOL fadeEnabled;
 
 UIColor *lockAvgColor;
 NSCache *cacheImageList;
+
+NSString *lockPortraitPath;
+NSString *lockLandscapePath;
+NSString *homePortraitPath;
+NSString *homeLandscapePath;
 
 NSString * const kPrefsIdentifier = @"com.denial.doabarrelwallprefs";

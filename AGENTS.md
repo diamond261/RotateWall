@@ -122,7 +122,7 @@ Deployment and debugging:
 
 ### Resource and Paths
 - Wallpaper images live under `/var/mobile/Library/RotateWall` (runtime behavior).
-- Preferences images use the libGcUniversal storage under the prefs identifier.
+- Preferences images are referenced by full file paths stored in prefs.
 - Keep paths consistent with rootless scheme when writing from Prefs code.
 
 ## Behavior Expectations

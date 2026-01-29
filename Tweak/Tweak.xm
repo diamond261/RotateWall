@@ -56,10 +56,10 @@
 		kHomeScreen = 1 << 1
 	};
 
-	static NSString * const kLockPortraitKey = @"lockPortraitImage";
-	static NSString * const kLockLandscapeKey = @"lockLandscapeImage";
-	static NSString * const kHomePortraitKey = @"homePortraitImage";
-	static NSString * const kHomeLandscapeKey = @"homeLandscapeImage";
+	static NSString * const kLockPortraitKey = @"lockPortraitPath";
+	static NSString * const kLockLandscapeKey = @"lockLandscapePath";
+	static NSString * const kHomePortraitKey = @"homePortraitPath";
+	static NSString * const kHomeLandscapeKey = @"homeLandscapePath";
 
 	static BOOL lastKnownLandscape = NO;
 	static BOOL lastAppliedLandscape = NO;
@@ -87,14 +87,27 @@
 		return isLandscape;
 	}
 
+	static NSString *pathForKey(NSString *key) {
+		if ([key isEqualToString:kLockPortraitKey]) return lockPortraitPath;
+		if ([key isEqualToString:kLockLandscapeKey]) return lockLandscapePath;
+		if ([key isEqualToString:kHomePortraitKey]) return homePortraitPath;
+		if ([key isEqualToString:kHomeLandscapeKey]) return homeLandscapePath;
+		return nil;
+	}
+
 	static UIImage *wallpaperImageForKey(NSString *key) {
-		UIImage *img = [cacheImageList objectForKey:key];
+		NSString *path = pathForKey(key);
+		if (!path || [path length] == 0) {
+			return nil;
+		}
+
+		UIImage *img = [cacheImageList objectForKey:path];
 		if (!img) {
-			img = [GcImagePickerUtils imageFromDefaults:kPrefsIdentifier withKey:key];
+			img = [UIImage imageWithContentsOfFile:path];
 			if (!img) {
 				return nil;
 			}
-			[cacheImageList setObject:img forKey:key];
+			[cacheImageList setObject:img forKey:path];
 		}
 		return img;
 	}
@@ -122,6 +135,30 @@
 		} else {
 			[imageView setImage:image];
 		}
+	}
+
+	static UIColor *averageColorForImage(UIImage *image) {
+		if (!image || !image.CGImage) {
+			return nil;
+		}
+
+		CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+		unsigned char rgba[4] = {0, 0, 0, 0};
+		CGContextRef ctx = CGBitmapContextCreate(rgba, 1, 1, 8, 4, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+		if (!ctx) {
+			CGColorSpaceRelease(colorSpace);
+			return nil;
+		}
+
+		CGContextDrawImage(ctx, CGRectMake(0, 0, 1, 1), image.CGImage);
+		CGContextRelease(ctx);
+		CGColorSpaceRelease(colorSpace);
+
+		CGFloat r = rgba[0] / 255.0;
+		CGFloat g = rgba[1] / 255.0;
+		CGFloat b = rgba[2] / 255.0;
+		CGFloat a = rgba[3] / 255.0;
+		return [UIColor colorWithRed:r green:g blue:b alpha:a];
 	}
 
 	static void updateForImageLocation(UIImage *img, WallpaperLocation loc) {
@@ -154,14 +191,14 @@
 		}
 
 		if (compatibilityModeEnabled && loc & kLockScreen) {
+			UIColor *avgColor = averageColorForImage(img);
+			if (avgColor) {
+				CGFloat r,g,b,a;
+				[avgColor getRed:&r green:&g blue:&b alpha:&a];
 
-			CGFloat r,g,b,a;
-			[[img averageColor] getRed:&r green:&g blue:&b alpha:&a];
-
-			//UIDeviceRGBColor is needed as the SB uses it and it would otherwise crash
-			lockAvgColor = [[objc_getClass("UIDeviceRGBColor") alloc] initWithRed:r green:g blue:b alpha:a];
-			//also, I guess one could add color caching here, but I don't want to right now
-
+				//UIDeviceRGBColor is needed as the SB uses it and it would otherwise crash
+				lockAvgColor = [[objc_getClass("UIDeviceRGBColor") alloc] initWithRed:r green:g blue:b alpha:a];
+			}
 		}
 	}
 
@@ -315,6 +352,10 @@
 	[preferences registerBool:&homescreenEnabled default:NO forKey:@"homescreenEnabled"];
 	[preferences registerBool:&compatibilityModeEnabled default:YES forKey:@"compatibilityModeEnabled"]; //mainly Jellyfish atm
 	[preferences registerBool:&fadeEnabled default:NO forKey:@"fadeEnabled"];
+	[preferences registerObject:&lockPortraitPath default:nil forKey:@"lockPortraitPath"];
+	[preferences registerObject:&lockLandscapePath default:nil forKey:@"lockLandscapePath"];
+	[preferences registerObject:&homePortraitPath default:nil forKey:@"homePortraitPath"];
+	[preferences registerObject:&homeLandscapePath default:nil forKey:@"homeLandscapePath"];
 
 	cacheImageList = [[NSCache alloc] init];
 	[cacheImageList setCountLimit:4];

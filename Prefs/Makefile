@@ -1,6 +1,5 @@
 BUNDLE_NAME = DoABarrelWallPrefs
 DoABarrelWallPrefs_FILES = $(wildcard *.m)
-DoABarrelWallPrefs_LIBRARIES = gcuniversal
 DoABarrelWallPrefs_PRIVATE_FRAMEWORKS = Preferences
 DoABarrelWallPrefs_EXTRA_FRAMEWORKS += Cephei CepheiPrefs
 DoABarrelWallPrefs_INSTALL_PATH = /Library/PreferenceBundles
