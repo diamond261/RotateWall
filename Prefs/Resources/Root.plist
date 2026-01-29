@@ -89,12 +89,10 @@
 		</dict>
 
 		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>HBRespringTableCell</string>
 			<key>label</key>
 			<string>Respring</string>
-			<key>action</key>
-			<string>respringUtil</string>
 		</dict>
 
 		<dict>
