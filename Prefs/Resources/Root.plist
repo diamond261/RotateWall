@@ -15,7 +15,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>Set full file paths to images on-device. Store images under /var/mobile/Library/RotateWall and enter the exact filename.</string>
+			<string>Tap a button to pick an image. Files are saved under /var/mobile/Library/RotateWall.</string>
 		</dict>
 
 		<dict>
@@ -85,22 +85,32 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
+			<string>Apply</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Respring</string>
+			<key>action</key>
+			<string>respringUtil</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
 			<string>Lock Screen - Portrait</string>
 		</dict>
 
 		<dict>
 			<key>cell</key>
-			<string>PSEditTextCell</string>
+			<string>PSButtonCell</string>
 			<key>label</key>
-			<string>Portrait Path</string>
-			<key>defaults</key>
-			<string>com.denial.doabarrelwallprefs</string>
-			<key>key</key>
-			<string>lockPortraitPath</string>
-			<key>placeholder</key>
-			<string>/var/mobile/Library/RotateWall/lock-portrait.jpg</string>
-			<key>PostNotification</key>
-			<string>com.denial.doabarrelwallprefs/ReloadPrefs</string>
+			<string>Select Portrait Photo</string>
+			<key>action</key>
+			<string>pickLockPortrait</string>
 		</dict>
 
 		<dict>
@@ -112,17 +122,11 @@
 
 		<dict>
 			<key>cell</key>
-			<string>PSEditTextCell</string>
+			<string>PSButtonCell</string>
 			<key>label</key>
-			<string>Landscape Path</string>
-			<key>defaults</key>
-			<string>com.denial.doabarrelwallprefs</string>
-			<key>key</key>
-			<string>lockLandscapePath</string>
-			<key>placeholder</key>
-			<string>/var/mobile/Library/RotateWall/lock-landscape.jpg</string>
-			<key>PostNotification</key>
-			<string>com.denial.doabarrelwallprefs/ReloadPrefs</string>
+			<string>Select Landscape Photo</string>
+			<key>action</key>
+			<string>pickLockLandscape</string>
 		</dict>
 
 		<dict>
@@ -134,17 +138,11 @@
 
 		<dict>
 			<key>cell</key>
-			<string>PSEditTextCell</string>
+			<string>PSButtonCell</string>
 			<key>label</key>
-			<string>Portrait Path</string>
-			<key>defaults</key>
-			<string>com.denial.doabarrelwallprefs</string>
-			<key>key</key>
-			<string>homePortraitPath</string>
-			<key>placeholder</key>
-			<string>/var/mobile/Library/RotateWall/home-portrait.jpg</string>
-			<key>PostNotification</key>
-			<string>com.denial.doabarrelwallprefs/ReloadPrefs</string>
+			<string>Select Portrait Photo</string>
+			<key>action</key>
+			<string>pickHomePortrait</string>
 		</dict>
 
 		<dict>
@@ -156,17 +154,11 @@
 
 		<dict>
 			<key>cell</key>
-			<string>PSEditTextCell</string>
+			<string>PSButtonCell</string>
 			<key>label</key>
-			<string>Landscape Path</string>
-			<key>defaults</key>
-			<string>com.denial.doabarrelwallprefs</string>
-			<key>key</key>
-			<string>homeLandscapePath</string>
-			<key>placeholder</key>
-			<string>/var/mobile/Library/RotateWall/home-landscape.jpg</string>
-			<key>PostNotification</key>
-			<string>com.denial.doabarrelwallprefs/ReloadPrefs</string>
+			<string>Select Landscape Photo</string>
+			<key>action</key>
+			<string>pickHomeLandscape</string>
 		</dict>
 	</array>
 	<key>title</key>
