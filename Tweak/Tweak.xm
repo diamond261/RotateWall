@@ -190,6 +190,28 @@
 		return lockMatches && homeMatches;
 	}
 
+	static void scheduleRecoveryRetryWithAttempt(NSUInteger attempt) {
+		if (!lockscreenEnabled && !homescreenEnabled) {
+			pendingRecoveryCheck = NO;
+			return;
+		}
+
+		BOOL currentLandscape = lastAppliedLandscape;
+		if (!wallpapersMatchExpectedForOrientation(currentLandscape)) {
+			updateWallpapersForCurrentOrientation();
+		}
+
+		if (attempt >= 3) {
+			pendingRecoveryCheck = NO;
+			return;
+		}
+
+		double delay = (attempt == 1) ? 0.10 : ((attempt == 2) ? 0.30 : 0.60);
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			scheduleRecoveryRetryWithAttempt(attempt + 1);
+		});
+	}
+
 	static void scheduleRecoveryRetry(void) {
 		if (pendingRecoveryCheck || (!lockscreenEnabled && !homescreenEnabled)) {
 			return;
@@ -197,24 +219,9 @@
 
 		pendingRecoveryCheck = YES;
 		recoveryAttempt = 0;
-
-		__block void (^retryBlock)(void) = ^{
-			BOOL currentLandscape = lastAppliedLandscape;
-			if (!wallpapersMatchExpectedForOrientation(currentLandscape)) {
-				updateWallpapersForCurrentOrientation();
-			}
-
-			recoveryAttempt++;
-			if (recoveryAttempt >= 3) {
-				pendingRecoveryCheck = NO;
-				return;
-			}
-
-			double delay = (recoveryAttempt == 1) ? 0.10 : ((recoveryAttempt == 2) ? 0.30 : 0.60);
-			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), retryBlock);
-		};
-
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), retryBlock);
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			scheduleRecoveryRetryWithAttempt(1);
+		});
 	}
 
 	static void setImageForImageView(UIImageView *imageView, UIImage *image) {
