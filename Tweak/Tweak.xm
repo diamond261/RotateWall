@@ -198,7 +198,7 @@
 		pendingRecoveryCheck = YES;
 		recoveryAttempt = 0;
 
-		void (^retryBlock)(void) = ^{
+		__block void (^retryBlock)(void) = ^{
 			BOOL currentLandscape = lastAppliedLandscape;
 			if (!wallpapersMatchExpectedForOrientation(currentLandscape)) {
 				updateWallpapersForCurrentOrientation();
