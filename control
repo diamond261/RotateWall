@@ -7,4 +7,4 @@ Maintainer: denial,diamond261
 Author: denial,diamond261
 Section: Tweaks
 Depends: mobilesubstrate, preferenceloader, firmware (>= 12.0), ws.hbang.common (>= 1.14)
-Icon: file:///var/jb/Library/PreferenceBundles/RotateWallPrefs.bundle/icon.png
+Icon: file:///var/jb/Library/PreferenceBundles/RotateWallPrefs.bundle/icon@3x.png
