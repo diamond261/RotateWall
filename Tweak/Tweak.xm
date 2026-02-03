@@ -64,6 +64,7 @@
 	static BOOL lastKnownLandscape = NO;
 	static BOOL lastAppliedLandscape = NO;
 	static BOOL hasAppliedOnce = NO;
+	static BOOL needsOrientationRecovery = NO;
 
 	static BOOL currentLandscapeOrientation(void) {
 		BOOL isLandscape = lastKnownLandscape;
@@ -145,12 +146,38 @@
 		return img;
 	}
 
-	static UIImage *wallpaperImageForLocation(WallpaperLocation location) {
-		BOOL landscape = currentLandscapeOrientation();
+	static UIImage *wallpaperImageForLocationWithOrientation(WallpaperLocation location, BOOL landscape) {
 		NSString *key = (location & kLockScreen)
 			? (landscape ? kLockLandscapeKey : kLockPortraitKey)
 			: (landscape ? kHomeLandscapeKey : kHomePortraitKey);
 		return wallpaperImageForKey(key);
+	}
+
+	static UIImage *wallpaperImageForLocation(WallpaperLocation location) {
+		return wallpaperImageForLocationWithOrientation(location, currentLandscapeOrientation());
+	}
+
+	static UIImage *currentWallpaperImageForLocation(WallpaperLocation location) {
+		SBWallpaperController *wallpaperController = [objc_getClass("SBWallpaperController") sharedInstance];
+		SBWallpaperViewController *responsible = SYSTEM_VERSION_LESS_THAN(@"14") ? wallpaperController : [wallpaperController valueForKey:@"_wallpaperViewController"];
+		SBFWallpaperView *wallpaperView = (location & kLockScreen) ? [responsible lockscreenWallpaperView] : [responsible homescreenWallpaperView];
+		UIImageView *wpImageView = (UIImageView *)[wallpaperView contentView];
+		if (![wpImageView isKindOfClass:[UIImageView class]]) {
+			return nil;
+		}
+		return wpImageView.image;
+	}
+
+	static BOOL wallpaperMatchesExpectedForLocation(WallpaperLocation location, BOOL landscape) {
+		UIImage *expected = wallpaperImageForLocationWithOrientation(location, landscape);
+		if (!expected) {
+			return YES;
+		}
+		UIImage *current = currentWallpaperImageForLocation(location);
+		if (!current) {
+			return NO;
+		}
+		return current == expected;
 	}
 
 	static void setImageForImageView(UIImageView *imageView, UIImage *image) {
@@ -271,11 +298,19 @@
 	static void handleOrientationChange(void) {
 		BOOL landscape = currentLandscapeOrientation();
 		if (hasAppliedOnce && landscape == lastAppliedLandscape) {
-			return;
+			BOOL lockMatches = !lockscreenEnabled || wallpaperMatchesExpectedForLocation(kLockScreen, landscape);
+			BOOL homeMatches = !homescreenEnabled || wallpaperMatchesExpectedForLocation(kHomeScreen, landscape);
+			if (!lockMatches || !homeMatches) {
+				needsOrientationRecovery = YES;
+			}
+			if (!needsOrientationRecovery) {
+				return;
+			}
 		}
 		lastAppliedLandscape = landscape;
 		hasAppliedOnce = YES;
 		updateWallpapersForCurrentOrientation();
+		needsOrientationRecovery = NO;
 	}
 
 	static void startOrientationMonitoring(void) {
