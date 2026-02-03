@@ -65,6 +65,7 @@
 	static BOOL lastAppliedLandscape = NO;
 	static BOOL hasAppliedOnce = NO;
 	static BOOL needsOrientationRecovery = NO;
+	static BOOL pendingRecoveryCheck = NO;
 
 	static BOOL currentLandscapeOrientation(void) {
 		BOOL isLandscape = lastKnownLandscape;
@@ -178,6 +179,12 @@
 			return NO;
 		}
 		return current == expected;
+	}
+
+	static BOOL wallpapersMatchExpectedForOrientation(BOOL landscape) {
+		BOOL lockMatches = !lockscreenEnabled || wallpaperMatchesExpectedForLocation(kLockScreen, landscape);
+		BOOL homeMatches = !homescreenEnabled || wallpaperMatchesExpectedForLocation(kHomeScreen, landscape);
+		return lockMatches && homeMatches;
 	}
 
 	static void setImageForImageView(UIImageView *imageView, UIImage *image) {
@@ -298,9 +305,7 @@
 	static void handleOrientationChange(void) {
 		BOOL landscape = currentLandscapeOrientation();
 		if (hasAppliedOnce && landscape == lastAppliedLandscape) {
-			BOOL lockMatches = !lockscreenEnabled || wallpaperMatchesExpectedForLocation(kLockScreen, landscape);
-			BOOL homeMatches = !homescreenEnabled || wallpaperMatchesExpectedForLocation(kHomeScreen, landscape);
-			if (!lockMatches || !homeMatches) {
+			if (!wallpapersMatchExpectedForOrientation(landscape)) {
 				needsOrientationRecovery = YES;
 			}
 			if (!needsOrientationRecovery) {
@@ -311,6 +316,17 @@
 		hasAppliedOnce = YES;
 		updateWallpapersForCurrentOrientation();
 		needsOrientationRecovery = NO;
+
+		if (!pendingRecoveryCheck) {
+			pendingRecoveryCheck = YES;
+			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+				BOOL currentLandscape = lastAppliedLandscape;
+				if (!wallpapersMatchExpectedForOrientation(currentLandscape)) {
+					updateWallpapersForCurrentOrientation();
+				}
+				pendingRecoveryCheck = NO;
+			});
+		}
 	}
 
 	static void startOrientationMonitoring(void) {
