@@ -66,6 +66,7 @@
 	static BOOL hasAppliedOnce = NO;
 	static BOOL needsOrientationRecovery = NO;
 	static BOOL pendingRecoveryCheck = NO;
+	static BOOL isApplyingInLayout = NO;
 
 	static BOOL currentLandscapeOrientation(void) {
 		BOOL isLandscape = lastKnownLandscape;
@@ -420,6 +421,59 @@
 				}
 			}
 
+		}
+	%end
+
+	%hook SBFWallpaperView
+		- (void)layoutSubviews {
+			%orig;
+			if ((!lockscreenEnabled && !homescreenEnabled) || isApplyingInLayout) {
+				return;
+			}
+
+			SBWallpaperController *wallpaperController = [objc_getClass("SBWallpaperController") sharedInstance];
+			SBWallpaperViewController *responsible = SYSTEM_VERSION_LESS_THAN(@"14") ? wallpaperController : [wallpaperController valueForKey:@"_wallpaperViewController"];
+			if (!responsible) {
+				return;
+			}
+
+			WallpaperLocation location = 0;
+			if (lockscreenEnabled && self == [responsible lockscreenWallpaperView]) {
+				location |= kLockScreen;
+			}
+			if (homescreenEnabled && self == [responsible homescreenWallpaperView]) {
+				location |= kHomeScreen;
+			}
+			if (!location) {
+				return;
+			}
+
+			BOOL landscape = currentLandscapeOrientation();
+			BOOL needsUpdate = NO;
+			if (location & kLockScreen) {
+				needsUpdate = needsUpdate || !wallpaperMatchesExpectedForLocation(kLockScreen, landscape);
+			}
+			if (location & kHomeScreen) {
+				needsUpdate = needsUpdate || !wallpaperMatchesExpectedForLocation(kHomeScreen, landscape);
+			}
+			if (!needsUpdate) {
+				return;
+			}
+
+			isApplyingInLayout = YES;
+			if (location & kLockScreen) {
+				UIImage *img = wallpaperImageForLocationWithOrientation(kLockScreen, landscape);
+				if (img) {
+					updateForImageLocation(img, kLockScreen);
+				}
+			}
+			if (location & kHomeScreen) {
+				UIImage *img = wallpaperImageForLocationWithOrientation(kHomeScreen, landscape);
+				if (img) {
+					updateForImageLocation(img, kHomeScreen);
+				}
+			}
+			isApplyingInLayout = NO;
 		}
 	%end
 
