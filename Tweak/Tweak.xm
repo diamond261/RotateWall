@@ -72,28 +72,28 @@
 
 	static BOOL currentLandscapeOrientation(void) {
 		BOOL isLandscape = lastKnownLandscape;
-		UIInterfaceOrientation interfaceOrientation = UIInterfaceOrientationUnknown;
-		if (@available(iOS 13.0, *)) {
-			for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
-				if (scene.activationState != UISceneActivationStateForegroundActive) {
-					continue;
-				}
+		UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
+		if (UIDeviceOrientationIsLandscape(deviceOrientation)) {
+			isLandscape = YES;
+		} else if (UIDeviceOrientationIsPortrait(deviceOrientation)) {
+			isLandscape = NO;
+		} else {
+			UIInterfaceOrientation interfaceOrientation = UIInterfaceOrientationUnknown;
+			if (@available(iOS 13.0, *)) {
+				for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+					if (scene.activationState != UISceneActivationStateForegroundActive) {
+						continue;
+					}
 
-				if ([scene isKindOfClass:[UIWindowScene class]]) {
-					interfaceOrientation = ((UIWindowScene *)scene).interfaceOrientation;
-					break;
+					if ([scene isKindOfClass:[UIWindowScene class]]) {
+						interfaceOrientation = ((UIWindowScene *)scene).interfaceOrientation;
+						break;
+					}
 				}
 			}
-		}
 
-		if (interfaceOrientation != UIInterfaceOrientationUnknown) {
-			isLandscape = UIInterfaceOrientationIsLandscape(interfaceOrientation);
-		} else {
-			UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
-			if (UIDeviceOrientationIsLandscape(deviceOrientation)) {
-				isLandscape = YES;
-			} else if (UIDeviceOrientationIsPortrait(deviceOrientation)) {
-				isLandscape = NO;
+			if (interfaceOrientation != UIInterfaceOrientationUnknown) {
+				isLandscape = UIInterfaceOrientationIsLandscape(interfaceOrientation);
 			}
 		}
 
