@@ -67,6 +67,7 @@
 	static BOOL needsOrientationRecovery = NO;
 	static BOOL pendingRecoveryCheck = NO;
 	static BOOL isApplyingInLayout = NO;
+	static NSUInteger recoveryAttempt = 0;
 
 	static BOOL currentLandscapeOrientation(void) {
 		BOOL isLandscape = lastKnownLandscape;
@@ -186,6 +187,33 @@
 		BOOL lockMatches = !lockscreenEnabled || wallpaperMatchesExpectedForLocation(kLockScreen, landscape);
 		BOOL homeMatches = !homescreenEnabled || wallpaperMatchesExpectedForLocation(kHomeScreen, landscape);
 		return lockMatches && homeMatches;
+	}
+
+	static void scheduleRecoveryRetry(void) {
+		if (pendingRecoveryCheck || (!lockscreenEnabled && !homescreenEnabled)) {
+			return;
+		}
+
+		pendingRecoveryCheck = YES;
+		recoveryAttempt = 0;
+
+		void (^retryBlock)(void) = ^{
+			BOOL currentLandscape = lastAppliedLandscape;
+			if (!wallpapersMatchExpectedForOrientation(currentLandscape)) {
+				updateWallpapersForCurrentOrientation();
+			}
+
+			recoveryAttempt++;
+			if (recoveryAttempt >= 3) {
+				pendingRecoveryCheck = NO;
+				return;
+			}
+
+			double delay = (recoveryAttempt == 1) ? 0.10 : ((recoveryAttempt == 2) ? 0.30 : 0.60);
+			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), retryBlock);
+		};
+
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), retryBlock);
 	}
 
 	static void setImageForImageView(UIImageView *imageView, UIImage *image) {
@@ -317,17 +345,7 @@
 		hasAppliedOnce = YES;
 		updateWallpapersForCurrentOrientation();
 		needsOrientationRecovery = NO;
-
-		if (!pendingRecoveryCheck) {
-			pendingRecoveryCheck = YES;
-			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-				BOOL currentLandscape = lastAppliedLandscape;
-				if (!wallpapersMatchExpectedForOrientation(currentLandscape)) {
-					updateWallpapersForCurrentOrientation();
-				}
-				pendingRecoveryCheck = NO;
-			});
-		}
+		scheduleRecoveryRetry();
 	}
 
 	static void startOrientationMonitoring(void) {
