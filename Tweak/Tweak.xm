@@ -68,6 +68,7 @@
 	static BOOL pendingRecoveryCheck = NO;
 	static BOOL isApplyingInLayout = NO;
 	static NSUInteger recoveryAttempt = 0;
+	static void updateWallpapersForCurrentOrientation(void);
 
 	static BOOL currentLandscapeOrientation(void) {
 		BOOL isLandscape = lastKnownLandscape;
